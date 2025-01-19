@@ -22,9 +22,7 @@ public class SiteService : ISiteService
 
     public async Task<SiteModel?> GetSiteByIdAsync(int id)
     {
-        var site = await _siteRepository.FindAsync(id);
-
-        return site;
+        return await _siteRepository.FindAsync(id);
     }
 
     public async Task<SiteModel> CreateSiteAsync(CreateSiteDto createSiteDto)

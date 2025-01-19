@@ -10,23 +10,23 @@ namespace BlocCs.API.Site;
 [Route("[controller]")]
 public class SiteController : ControllerBase
 {
-    public readonly ISiteService SiteService;
+    private readonly ISiteService _siteService;
 
     public SiteController(ISiteService siteService)
     {
-        SiteService = siteService;
+        _siteService = siteService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<SiteModel>>> Get()
     {
-        return Ok(await SiteService.GetAllSitesAsync());
+        return Ok(await _siteService.GetAllSitesAsync());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<SiteModel?>> Get(int id)
     {
-        var site = await SiteService.GetSiteByIdAsync(id);
+        var site = await _siteService.GetSiteByIdAsync(id);
 
         if (site == null) return NotFound();
 
@@ -36,9 +36,7 @@ public class SiteController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<SiteModel>> Post([FromBody] CreateSiteDto createSiteDto)
     {
-        var site = await SiteService.CreateSiteAsync(createSiteDto);
-
-        return Ok(site);
+        return Ok(await _siteService.CreateSiteAsync(createSiteDto));
     }
 
     [HttpPut]
@@ -46,8 +44,7 @@ public class SiteController : ControllerBase
     {
         try
         {
-            var site = await SiteService.UpdateSiteAsync(updateSiteDto);
-            return Ok(site);
+            return Ok(await _siteService.UpdateSiteAsync(updateSiteDto));
         }
         catch (KeyNotFoundException e)
         {
@@ -60,11 +57,11 @@ public class SiteController : ControllerBase
     {   
         try
         {
-            var siteDto = await SiteService.GetSiteByIdAsync(id);
+            var siteDto = await _siteService.GetSiteByIdAsync(id);
             
             var site = UpdateDeleteSiteMapper.ToUpdateDeleteSiteDto(siteDto!);
             
-            await SiteService.DeleteSiteAsync(site);
+            await _siteService.DeleteSiteAsync(site);
             return Ok();
         }
         catch (KeyNotFoundException e)
