@@ -1,3 +1,4 @@
+using BlocCs.API.Service.Models;
 using BlocCs.API.Site.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,12 +11,12 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<SiteModel> Sites { get; set; }
-    // public DbSet<ServiceModel> Services { get; set; }
+    public DbSet<ServiceModel> Services { get; set; }
     // public DbSet<SalarieModel> Salaries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectionString = "Server=localhost;Database=annuaire_cubes;User ID=root;Password=;Pooling=true;";
+        var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
         optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 }

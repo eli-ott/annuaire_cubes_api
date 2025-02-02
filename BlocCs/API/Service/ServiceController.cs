@@ -1,15 +1,14 @@
 using BlocCs.API.Service.DTOs;
-using BlocCs.API.Service.Mappers;
 using BlocCs.API.Service.Models;
 using BlocCs.API.Service.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
+using BlocCs.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlocCs.API.Service;
 
 [ApiController]
-[Route("[controller]")]
-public class ServiceController: ControllerBase
+[Route("service")]
+public class ServiceController : ControllerBase
 {
     private readonly IServiceService _serviceService;
 
@@ -21,7 +20,7 @@ public class ServiceController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<ServiceModel>>> Get()
     {
-        return Ok(await _serviceService.GetAllServicesAsync());
+        return Ok(Utils.RespondWithData(await _serviceService.GetAllServicesAsync()));
     }
 
     [HttpGet("{id}")]
@@ -29,43 +28,28 @@ public class ServiceController: ControllerBase
     {
         var service = await _serviceService.GetServiceByIdAsync(id);
         if (service == null) return NotFound();
-        
-        return Ok(service);
+
+        return Ok(Utils.RespondWithData(service));
     }
 
     [HttpPost]
     public async Task<ActionResult<ServiceModel>> Post(CreateServiceDto serviceDto)
     {
-        return Ok(await _serviceService.CreateServiceAsync(serviceDto));
+        return Ok(Utils.RespondWithData((await _serviceService.CreateServiceAsync(serviceDto))));
     }
 
     [HttpPut]
     public async Task<ActionResult<ServiceModel>> Put(ServiceModel serviceModel)
     {
-        try
-        {
-            return Ok(await _serviceService.UpdateServiceAsync(serviceModel));
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
+        return Ok(Utils.RespondWithData(await _serviceService.UpdateServiceAsync(serviceModel)));
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)
     {
-        try
-        {
-            var service = await _serviceService.GetServiceByIdAsync(id);
+        var service = await _serviceService.GetServiceByIdAsync(id);
 
-            await _serviceService.DeleteServiceAsync(service!);
-            return Ok();
-        }
-        catch (KeyNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-        
+        await _serviceService.DeleteServiceAsync(service!);
+        return Ok(Utils.RespondWithoutData());
     }
 }
