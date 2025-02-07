@@ -2,6 +2,7 @@ using BlocCs.API.Service.DTOs;
 using BlocCs.API.Service.Models;
 using BlocCs.API.Service.Services;
 using BlocCs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlocCs.API.Service;
@@ -33,18 +34,21 @@ public class ServiceController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<ServiceModel>> Post(CreateServiceDto serviceDto)
     {
         return Ok(Utils.RespondWithData((await _serviceService.CreateServiceAsync(serviceDto))));
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult<ServiceModel>> Put(ServiceModel serviceModel)
     {
         return Ok(Utils.RespondWithData(await _serviceService.UpdateServiceAsync(serviceModel)));
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
         var service = await _serviceService.GetServiceByIdAsync(id);

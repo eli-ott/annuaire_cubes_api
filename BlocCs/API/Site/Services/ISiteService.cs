@@ -9,5 +9,5 @@ public interface ISiteService
     Task<SiteModel?> GetSiteByIdAsync(int id);
     Task<SiteModel> CreateSiteAsync(CreateSiteDto siteDto);
     Task<SiteModel> UpdateSiteAsync(UpdateDeleteSiteDto siteDto);
-    Task<int> DeleteSiteAsync(UpdateDeleteSiteDto siteDto);
+    Task<SiteModel> DeleteSiteAsync(UpdateDeleteSiteDto siteDto);
 }

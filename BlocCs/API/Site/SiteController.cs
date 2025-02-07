@@ -3,6 +3,7 @@ using BlocCs.API.Site.Mappers;
 using BlocCs.API.Site.Models;
 using BlocCs.API.Site.Services;
 using BlocCs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlocCs.API.Site;
@@ -35,21 +36,26 @@ public class SiteController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<SiteModel>> Post([FromBody] CreateSiteDto createSiteDto)
     {
         return Ok(Utils.RespondWithData(await _siteService.CreateSiteAsync(createSiteDto)));
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult<SiteModel>> Put([FromBody] UpdateDeleteSiteDto updateSiteDto)
     {
         return Ok(Utils.RespondWithData(await _siteService.UpdateSiteAsync(updateSiteDto)));
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
         var siteDto = await _siteService.GetSiteByIdAsync(id);
+        
+        if(siteDto == null) throw new KeyNotFoundException();
 
         var site = UpdateDeleteSiteMapper.ToUpdateDeleteSiteDto(siteDto!);
 

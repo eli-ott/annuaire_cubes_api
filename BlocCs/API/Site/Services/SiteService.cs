@@ -2,8 +2,8 @@ using BlocCs.API.Site.DTOs;
 using BlocCs.API.Site.Mappers;
 using BlocCs.API.Site.Models;
 using BlocCs.API.Site.Repositories;
-using BlocCs.API.Site.Services;
 
+namespace BlocCs.API.Site.Services;
 
 public class SiteService : ISiteService
 {
@@ -40,13 +40,14 @@ public class SiteService : ISiteService
         return await _siteRepository.UpdateAsync(site);
     }
 
-    public async Task<int> DeleteSiteAsync(UpdateDeleteSiteDto siteDto)
+    public async Task<SiteModel> DeleteSiteAsync(UpdateDeleteSiteDto siteDto)
     {
         var site = UpdateDeleteSiteMapper.FromUpdateDeleteSiteDto(siteDto);
         // Will throw an error if the element doesn't exist
         var siteCheck = await _siteRepository.AnyAsync(x => x.Id == site.Id);
         if (!siteCheck) throw new KeyNotFoundException();
 
-        return await _siteRepository.DeleteAsync(site);
+        await _siteRepository.DeleteAsync(site);
+        return site;
     }
 }

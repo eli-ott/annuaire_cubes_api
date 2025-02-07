@@ -47,6 +47,7 @@ public class CustomExceptionMiddleware
 
         var developerDetails = _isDevelopment ? exception.ToString() : null;
 
+        Console.WriteLine("In middleware exception");
         var errorResponse = new
         {
             status = statusCode,

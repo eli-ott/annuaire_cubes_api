@@ -3,6 +3,7 @@ using BlocCs.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlocCs.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250207180246_AddedSalarie")]
+    partial class AddedSalarie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,22 +23,6 @@ namespace BlocCs.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("BlocCs.API.Admin.Models.AdminModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins");
-                });
 
             modelBuilder.Entity("BlocCs.API.Salarie.Models.SalarieModel", b =>
                 {
@@ -119,38 +106,6 @@ namespace BlocCs.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sites");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Nom = "Siège administratif",
-                            Ville = "Paris"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nom = "Site de production",
-                            Ville = "Nantes"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Nom = "Site de production",
-                            Ville = "Toulouse"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Nom = "Site de production",
-                            Ville = "Nice"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Nom = "Site de production",
-                            Ville = "Lille"
-                        });
                 });
 #pragma warning restore 612, 618
         }
