@@ -22,7 +22,7 @@ public class GetSalarieMapper
         };
     }
 
-    public static SalarieModel ToSalarieModel(GetSalarieDto salarieDto)
+    public static SalarieModel FromGetSalarieDto(GetSalarieDto salarieDto)
     {
         return new SalarieModel
         {

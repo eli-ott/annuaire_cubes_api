@@ -31,27 +31,41 @@ public class SalarieService : ISalarieService
         return await _salarieRepository.FindAsync(id);
     }
 
-    public async Task<SalarieModel> CreateSalarieAsync(CreateUpdateSalarieDto updateSalarieDto)
+    public async Task<GetSalarieDto> CreateSalarieAsync(GetSalarieDto salarieDto)
     {
-        var salarie = CreateUpdateSalarieMapper.FromCreateUpdateSalarieDto(updateSalarieDto);
+        var salarie = GetSalarieMapper.FromGetSalarieDto(salarieDto);
 
         var serviceCheck = await _serviceRepository.AnyAsync(x => x.Id == salarie.Service);
         if (!serviceCheck) throw new KeyNotFoundException("Service not found");
 
-        var siteCheck = await _siteRepository.AnyAsync(x => x.Id == updateSalarieDto.Site);
+        var siteCheck = await _siteRepository.AnyAsync(x => x.Id == salarie.Site);
         if (!siteCheck) throw new KeyNotFoundException("Site not found");
 
-        return await _salarieRepository.AddAsync(salarie);
+        await _salarieRepository.AddAsync(salarie);
+        
+        var salarieDetails = await GetSalarieByIdAsync(salarie.Id);
+            
+        return salarieDetails!;
     }
 
-    public async Task<SalarieModel> UpdateSalarieAsync(CreateUpdateSalarieDto salarieDto)
+    public async Task<GetSalarieDto> UpdateSalarieAsync(GetSalarieDto salarieDto)
     {
-        var salarie = CreateUpdateSalarieMapper.FromCreateUpdateSalarieDto(salarieDto);
+        var salarie = GetSalarieMapper.FromGetSalarieDto(salarieDto);
 
         var salarieCheck = await _salarieRepository.AnyAsync(x => x.Id == salarie.Id);
         if (!salarieCheck) throw new KeyNotFoundException();
+        
+        var serviceCheck = await _serviceRepository.AnyAsync(x => x.Id == salarie.Service);
+        if (!serviceCheck) throw new KeyNotFoundException("Service not found");
 
-        return await _salarieRepository.UpdateAsync(salarie);
+        var siteCheck = await _siteRepository.AnyAsync(x => x.Id == salarie.Site);
+        if (!siteCheck) throw new KeyNotFoundException("Site not found");
+
+        await _salarieRepository.UpdateAsync(salarie);
+
+        var salarieDetails = await GetSalarieByIdAsync(salarie.Id);
+
+        return salarieDetails!;
     }
 
     public async Task<SalarieModel> DeleteSalarieAsync(SalarieModel salarie)

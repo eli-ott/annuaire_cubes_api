@@ -14,12 +14,12 @@ public class AdminService : IAdminService
         _adminRepository = adminRepo;
     }
 
-    public async Task<List<AdminModel>> GetAllAdminsAsync()
+    public async Task<List<GetAdminDto>> GetAllAdminsAsync()
     {
         return await _adminRepository.ListAsync();
     }
 
-    public async Task<AdminModel?> GetAdminByIdAsync(int id)
+    public async Task<GetAdminDto?> GetAdminByIdAsync(int id)
     {
         return await _adminRepository.FindAsync(id);
     }
@@ -34,6 +34,7 @@ public class AdminService : IAdminService
     public async Task<AdminModel> DeleteAdminAsync(AdminModel admin)
     {
         var adminCheck = await _adminRepository.AnyAsync(x => x.Id == admin.Id);
+        Console.WriteLine(adminCheck);
         if (!adminCheck) throw new KeyNotFoundException();
         
         await _adminRepository.DeleteAsync(admin);

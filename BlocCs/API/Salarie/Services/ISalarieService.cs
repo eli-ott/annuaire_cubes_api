@@ -9,7 +9,7 @@ public interface ISalarieService
 {
     Task<List<GetSalarieDto>> GetAllSalariesAsync();
     Task<GetSalarieDto?> GetSalarieByIdAsync(int id);
-    Task<SalarieModel> CreateSalarieAsync(CreateUpdateSalarieDto updateSalarieDto);
-    Task<SalarieModel> UpdateSalarieAsync(CreateUpdateSalarieDto salarie);
+    Task<GetSalarieDto> CreateSalarieAsync(GetSalarieDto updateSalarieDto);
+    Task<GetSalarieDto> UpdateSalarieAsync(GetSalarieDto salarie);
     Task<SalarieModel> DeleteSalarieAsync(SalarieModel salarieModel);
 }

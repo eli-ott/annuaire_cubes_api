@@ -46,6 +46,7 @@ public class SalarieRepository : BaseRepository<SalarieModel>, ISalarieRepositor
         return await (from salarie in DbContext.Salaries
             join service in DbContext.Services on salarie.Service equals service.Id
             join site in DbContext.Sites on salarie.Site equals site.Id
+            where salarie.Id == id
             select new GetSalarieDto
             {
                 Id = salarie.Id,

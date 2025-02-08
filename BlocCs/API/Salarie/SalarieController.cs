@@ -36,14 +36,14 @@ public class SalarieController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult<GetSalarieDto>> Post(CreateUpdateSalarieDto updateSalarieDto)
+    public async Task<ActionResult<GetSalarieDto>> Post(GetSalarieDto salarieDto)
     {
-        return Ok(Utils.RespondWithData(await _salarieService.CreateSalarieAsync(updateSalarieDto)));
+        return Ok(Utils.RespondWithData(await _salarieService.CreateSalarieAsync(salarieDto)));
     }
 
     [HttpPut]
     [Authorize]
-    public async Task<ActionResult> Put(CreateUpdateSalarieDto salarieDto)
+    public async Task<ActionResult> Put(GetSalarieDto salarieDto)
     {
         return Ok(Utils.RespondWithData(await _salarieService.UpdateSalarieAsync(salarieDto)));
     }
@@ -52,7 +52,7 @@ public class SalarieController : ControllerBase
     [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
-        var salarie = GetSalarieMapper.ToSalarieModel(await _salarieService.GetSalarieByIdAsync(id)
+        var salarie = GetSalarieMapper.FromGetSalarieDto(await _salarieService.GetSalarieByIdAsync(id)
                                                       ?? throw new KeyNotFoundException("Can't find the employee"));
 
         await _salarieService.DeleteSalarieAsync(salarie);

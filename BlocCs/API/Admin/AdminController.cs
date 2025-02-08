@@ -1,4 +1,5 @@
 using BlocCs.API.Admin.DTOs;
+using BlocCs.API.Admin.Mappers;
 using BlocCs.API.Admin.Models;
 using BlocCs.API.Admin.Services;
 using BlocCs.Shared;
@@ -20,7 +21,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<AdminModel>>> Get()
+    public async Task<ActionResult<List<GetAdminDto>>> Get()
     {
         return Ok(Utils.RespondWithData(await _adminService.GetAllAdminsAsync()));
     }
@@ -34,8 +35,8 @@ public class AdminController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<AdminModel>> Delete(int id)
     {
-        var admin = await _adminService.GetAdminByIdAsync(id);
-        if (admin == null) throw new KeyNotFoundException();
+        var admin = GetAdminMapper.FromGetAdminDto(await _adminService.GetAdminByIdAsync(id)
+                                                   ?? throw new NullReferenceException("Admin not found."));
 
         await _adminService.DeleteAdminAsync(admin);
         return Ok(Utils.RespondWithoutData());

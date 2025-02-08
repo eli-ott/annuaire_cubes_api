@@ -41,7 +41,7 @@ public class AuthService : IAuthService
         // Faire une liste de Claims 
         var claims = new List<Claim>
         {
-            new Claim("UserId", admin.Id.ToString())
+            new Claim("UserId", admin.IdUser.ToString())
         };
 
         // Signer le token de connexion JWT
@@ -56,7 +56,7 @@ public class AuthService : IAuthService
             issuer: "Issuer",
             audience: "Audience",
             signingCredentials: signingCredentials,
-            expires: DateTime.UtcNow.AddHours(12));
+            expires: DateTime.UtcNow.AddHours(1));
 
         // Générer le JWT à partir de l'objet JWT 
         string token = new JwtSecurityTokenHandler().WriteToken(jwt);
