@@ -34,7 +34,6 @@ public class AdminService : IAdminService
     public async Task<AdminModel> DeleteAdminAsync(AdminModel admin)
     {
         var adminCheck = await _adminRepository.AnyAsync(x => x.Id == admin.Id);
-        Console.WriteLine(adminCheck);
         if (!adminCheck) throw new KeyNotFoundException();
         
         await _adminRepository.DeleteAsync(admin);

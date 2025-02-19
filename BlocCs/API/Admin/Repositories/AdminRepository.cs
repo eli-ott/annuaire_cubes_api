@@ -32,7 +32,7 @@ public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
                 Service = new ServiceModel
                 {
                     Id = service.Id,
-                    Nom = service.Nom,
+                    Nom = service.Nom
                 },
                 Site = new SiteModel
                 {
@@ -43,13 +43,13 @@ public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
             }).ToListAsync();
     }
     
-    public async Task<GetAdminDto> FindAsync(int id)
+    public async Task<GetAdminDto?> FindAsync(int id)
     {
         return await (from admin in DbContext.Admins
             join salarie in DbContext.Salaries on admin.IdUser equals salarie.Id
             join service in DbContext.Services on salarie.Service equals service.Id
             join site in DbContext.Sites on salarie.Site equals site.Id
-            where admin.Id == id
+            where admin.IdUser == id
             select new GetAdminDto
             {
                 IdAdmin = admin.Id,
@@ -62,7 +62,7 @@ public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
                 Service = new ServiceModel
                 {
                     Id = service.Id,
-                    Nom = service.Nom,
+                    Nom = service.Nom
                 },
                 Site = new SiteModel
                 {
@@ -70,6 +70,6 @@ public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
                     Nom = site.Nom,
                     Ville = site.Ville
                 }
-            }).FirstAsync();
+            }).FirstOrDefaultAsync();
     }
 }

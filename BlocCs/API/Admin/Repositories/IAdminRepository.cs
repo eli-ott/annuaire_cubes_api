@@ -8,5 +8,5 @@ namespace BlocCs.API.Admin.Repositories;
 public interface IAdminRepository : IRepository<AdminModel>
 {
     Task<List<GetAdminDto>> ListAsync();
-    Task<GetAdminDto> FindAsync(int id);
+    Task<GetAdminDto?> FindAsync(int id);
 }

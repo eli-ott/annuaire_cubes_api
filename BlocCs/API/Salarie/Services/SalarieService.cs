@@ -1,3 +1,5 @@
+using BlocCs.API.Admin.Extensions;
+using BlocCs.API.Admin.Repositories;
 using BlocCs.API.Salarie.DTOs;
 using BlocCs.API.Salarie.Mappers;
 using BlocCs.API.Salarie.Models;
@@ -12,13 +14,15 @@ public class SalarieService : ISalarieService
     private readonly ISalarieRepository _salarieRepository;
     private readonly IServiceRepository _serviceRepository;
     private readonly ISiteRepository _siteRepository;
+    private readonly IAdminRepository _adminRepository;
 
     public SalarieService(ISalarieRepository salarieRepository, IServiceRepository serviceRepository,
-        ISiteRepository siteRepository)
+        ISiteRepository siteRepository, IAdminRepository adminRepository)
     {
         _salarieRepository = salarieRepository;
         _serviceRepository = serviceRepository;
         _siteRepository = siteRepository;
+        _adminRepository = adminRepository;
     }
 
     public async Task<List<GetSalarieDto>> GetAllSalariesAsync()
@@ -42,9 +46,9 @@ public class SalarieService : ISalarieService
         if (!siteCheck) throw new KeyNotFoundException("Site not found");
 
         await _salarieRepository.AddAsync(salarie);
-        
+
         var salarieDetails = await GetSalarieByIdAsync(salarie.Id);
-            
+
         return salarieDetails!;
     }
 
@@ -54,7 +58,7 @@ public class SalarieService : ISalarieService
 
         var salarieCheck = await _salarieRepository.AnyAsync(x => x.Id == salarie.Id);
         if (!salarieCheck) throw new KeyNotFoundException();
-        
+
         var serviceCheck = await _serviceRepository.AnyAsync(x => x.Id == salarie.Service);
         if (!serviceCheck) throw new KeyNotFoundException("Service not found");
 
@@ -72,6 +76,12 @@ public class SalarieService : ISalarieService
     {
         var salarieCheck = await _salarieRepository.AnyAsync(x => x.Id == salarie.Id);
         if (!salarieCheck) throw new KeyNotFoundException();
+
+        var foundAdmin = await _adminRepository.FindAsync(salarie.Id);
+        if (foundAdmin != null)
+        {
+            await _adminRepository.DeleteAsync(foundAdmin.ToAdminModel());
+        }
 
         await _salarieRepository.DeleteAsync(salarie);
         return salarie;

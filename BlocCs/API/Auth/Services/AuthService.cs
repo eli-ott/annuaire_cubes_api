@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using BlocCs.API.Admin.Repositories;
 using BlocCs.API.Auth.Models;
 using BlocCs.API.Salarie.Repositories;
@@ -35,8 +36,8 @@ public class AuthService : IAuthService
             throw new AuthenticationException("The user associated with this phone number does not exist.");
 
         // Check if the user is an admin
-        var admin = await _adminRepository.FindAsync(user.Id);
-        if (admin == null) throw new AuthenticationException("The user is not an administrator.");
+        var admin = await _adminRepository.FindAsync(user.Id) ??
+                    throw new AuthenticationException("The user is not an administrator.");
 
         // Faire une liste de Claims 
         var claims = new List<Claim>
