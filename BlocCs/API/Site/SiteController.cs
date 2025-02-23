@@ -54,8 +54,8 @@ public class SiteController : ControllerBase
     public async Task<ActionResult> Delete(int id)
     {
         var siteDto = await _siteService.GetSiteByIdAsync(id);
-        
-        if(siteDto == null) throw new KeyNotFoundException();
+
+        if (siteDto == null) throw new KeyNotFoundException();
 
         var site = UpdateDeleteSiteMapper.ToUpdateDeleteSiteDto(siteDto!);
 
