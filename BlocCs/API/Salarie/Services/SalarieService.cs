@@ -38,6 +38,12 @@ public class SalarieService : ISalarieService
     public async Task<GetSalarieDto> CreateSalarieAsync(GetSalarieDto salarieDto)
     {
         var salarie = GetSalarieMapper.FromGetSalarieDto(salarieDto);
+        
+        var foundSalarieWithPhone = _salarieRepository.FirstOrDefaultAsync(x => x.TelPortable == salarieDto.TelPortable);
+        if (foundSalarieWithPhone != null)
+        {
+            throw new BadHttpRequestException("Un utilisateur avec ce numéro de téléphone portable existe déjà");
+        }
 
         var serviceCheck = await _serviceRepository.AnyAsync(x => x.Id == salarie.Service);
         if (!serviceCheck) throw new KeyNotFoundException("Service not found");
