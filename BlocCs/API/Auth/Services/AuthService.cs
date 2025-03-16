@@ -11,17 +11,38 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BlocCs.API.Auth.Services;
 
+/// <summary>
+/// The authentication service
+/// </summary>
 public class AuthService : IAuthService
 {
+    /// <summary>
+    /// The salaries repository
+    /// </summary>
     private readonly ISalarieRepository _salarieRepository;
+    /// <summary>
+    /// The admin repository
+    /// </summary>
     private readonly IAdminRepository _adminRepository;
 
+    /// <summary>
+    /// The auth constructor
+    /// </summary>
+    /// <param name="salarieRepository">The salarie repository</param>
+    /// <param name="adminRepository">The admin repostiory</param>
     public AuthService(ISalarieRepository salarieRepository, IAdminRepository adminRepository)
     {
         _salarieRepository = salarieRepository;
         _adminRepository = adminRepository;
     }
 
+    /// <summary>
+    /// Login a user
+    /// </summary>
+    /// <param name="loginModel">The login information</param>
+    /// <returns>A <see cref="string"/> that contains the JWT token</returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    /// <exception cref="AuthenticationException"></exception>
     public async Task<string> Login(LoginModel loginModel)
     {
         var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD")

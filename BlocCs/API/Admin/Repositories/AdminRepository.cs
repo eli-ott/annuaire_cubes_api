@@ -8,12 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlocCs.API.Admin.Repositories;
 
+/// <summary>
+/// The repostiory for the admins. Inherits <see cref="BaseRepository{AdminModel}"/> methods
+/// </summary>
 public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
 {
+    /// <summary>
+    /// Admin repository constructor
+    /// </summary>
+    /// <param name="dbContext">The application database context</param>
     public AdminRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
+    /// <summary>
+    /// List all the admins
+    /// </summary>
+    /// <returns>A task list of <see cref="GetAdminDto"/></returns>
     public async Task<List<GetAdminDto>> ListAsync()
     {
         return await (from admin in DbContext.Admins
@@ -42,7 +53,12 @@ public class AdminRepository : BaseRepository<AdminModel>, IAdminRepository
                 }
             }).ToListAsync();
     }
-    
+
+    /// <summary>
+    /// Get an admin based on its id
+    /// </summary>
+    /// <param name="id">The id of the admin</param>
+    /// <returns>A task of <see cref="GetAdminDto"/>></returns>
     public async Task<GetAdminDto?> FindAsync(int id)
     {
         return await (from admin in DbContext.Admins

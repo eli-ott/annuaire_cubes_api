@@ -16,8 +16,15 @@ using Microsoft.OpenApi.Models;
 
 namespace BlocCs.Extensions;
 
+/// <summary>
+/// Inject all the dependencies
+/// </summary>
 public static class DependencyInjectionExtensions
 {
+    /// <summary>
+    /// Inject dependencies constructor
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
     public static void InjectDependencies(this WebApplicationBuilder builder)
     {
         builder.Services.AddControllers();
@@ -28,6 +35,10 @@ public static class DependencyInjectionExtensions
         builder.AddJwt();
     }
 
+    /// <summary>
+    /// Adds the swagger to the project
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
     private static void AddSwagger(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
@@ -58,6 +69,10 @@ public static class DependencyInjectionExtensions
         });
     }
 
+    /// <summary>
+    /// Add the repositories
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
     private static void AddRepositories(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<ISiteRepository, SiteRepository>();
@@ -66,6 +81,10 @@ public static class DependencyInjectionExtensions
         builder.Services.AddScoped<IAdminRepository, AdminRepository>();
     }
 
+    /// <summary>
+    /// Add the services
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
     private static void AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<ISiteService, SiteService>();
@@ -75,6 +94,10 @@ public static class DependencyInjectionExtensions
         builder.Services.AddScoped<IAuthService, AuthService>();
     }
 
+    /// <summary>
+    /// Adds the ef core configuration
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
     private static void AddEfCoreConfiguration(this WebApplicationBuilder builder)
     {
         var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
@@ -82,6 +105,11 @@ public static class DependencyInjectionExtensions
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
     }
 
+    /// <summary>
+    /// Adds JWT token
+    /// </summary>
+    /// <param name="builder">An instance of <see cref="WebApplicationBuilder"/></param>
+    /// <exception cref="InvalidOperationException"></exception>
     private static void AddJwt(this WebApplicationBuilder builder)
     {
         var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ??

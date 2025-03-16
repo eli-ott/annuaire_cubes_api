@@ -8,12 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlocCs.API.Salarie.Repositories;
 
+/// <summary>
+/// The repository for the salaries
+/// </summary>
 public class SalarieRepository : BaseRepository<SalarieModel>, ISalarieRepository
 {
+    /// <summary>
+    /// The salarie repository constructor
+    /// </summary>
+    /// <param name="dbContext">The application database context</param>
     public SalarieRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
+    /// <summary>
+    /// List all the salaries
+    /// </summary>
+    /// <returns>A tasked list of <see cref="GetSalarieDto"/></returns>
     public async Task<List<GetSalarieDto>> ListAsync()
     {
         return await (from salarie in DbContext.Salaries
@@ -41,6 +52,11 @@ public class SalarieRepository : BaseRepository<SalarieModel>, ISalarieRepositor
             }).ToListAsync();
     }
 
+    /// <summary>
+    /// Find a salarie
+    /// </summary>
+    /// <param name="id">The id of the salarie</param>
+    /// <returns>A tasked list of <see cref="GetSalarieDto"/></returns>
     public async Task<GetSalarieDto> FindAsync(int id)
     {
         return await (from salarie in DbContext.Salaries
