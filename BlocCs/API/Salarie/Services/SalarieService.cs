@@ -1,3 +1,4 @@
+using System.Text.Json;
 using BlocCs.API.Admin.Extensions;
 using BlocCs.API.Admin.Repositories;
 using BlocCs.API.Salarie.DTOs;
@@ -18,14 +19,17 @@ public class SalarieService : ISalarieService
     /// The salarie repository
     /// </summary>
     private readonly ISalarieRepository _salarieRepository;
+
     /// <summary>
     /// The service repository
     /// </summary>
     private readonly IServiceRepository _serviceRepository;
+
     /// <summary>
     /// The site repository
     /// </summary>
     private readonly ISiteRepository _siteRepository;
+
     /// <summary>
     /// The admin repository
     /// </summary>
@@ -76,9 +80,9 @@ public class SalarieService : ISalarieService
     public async Task<GetSalarieDto> CreateSalarieAsync(GetSalarieDto salarieDto)
     {
         var salarie = GetSalarieMapper.FromGetSalarieDto(salarieDto);
-        
-        var foundSalarieWithPhone = _salarieRepository.FirstOrDefaultAsync(x => x.TelPortable == salarieDto.TelPortable);
-        if (foundSalarieWithPhone != null)
+
+        var foundSalarieWithPhone = await _salarieRepository.AnyAsync(x => x.TelPortable == salarieDto.TelPortable);
+        if (foundSalarieWithPhone)
         {
             throw new BadHttpRequestException("Un utilisateur avec ce numéro de téléphone portable existe déjà");
         }
